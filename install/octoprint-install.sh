@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -37,11 +37,11 @@ msg_info "Creating user octoprint"
 useradd -m -s /bin/bash -p $(openssl passwd -1 octoprint) octoprint
 usermod -aG sudo,tty,dialout octoprint
 chown -R octoprint:octoprint /opt
-echo "octoprint ALL=NOPASSWD: $(command -v systemctl) restart octoprint, $(command -v reboot), $(command -v poweroff)" > /etc/sudoers.d/octoprint
+echo "octoprint ALL=NOPASSWD: $(command -v systemctl) restart octoprint, $(command -v reboot), $(command -v poweroff)" >/etc/sudoers.d/octoprint
 msg_ok "Created user octoprint"
 
 msg_info "Installing OctoPrint"
-$STD sudo -u octoprint bash << EOF
+$STD sudo -u octoprint bash <<EOF
 mkdir /opt/octoprint
 cd /opt/octoprint
 python3 -m venv .

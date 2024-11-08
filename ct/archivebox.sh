@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ___              __    _            ____
    /   |  __________/ /_  (_)   _____  / __ )____  _  __
   / /| | / ___/ ___/ __ \/ / | / / _ \/ __  / __ \| |/_/
@@ -53,28 +53,31 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/archivebox ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-fi
-msg_info "Stopping ${APP}"
-systemctl stop archivebox
-msg_ok "Stopped ${APP}"
+  header_info
+  if [[ ! -d /opt/archivebox ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  if (($(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80)); then
+    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+  fi
+  msg_info "Stopping ${APP}"
+  systemctl stop archivebox
+  msg_ok "Stopped ${APP}"
 
-msg_info "Updating ${APP}"
-cd /opt/archivebox/data
-pip install --upgrade --ignore-installed archivebox
-sudo -u archivebox archivebox init
-msg_ok "Updated ${APP}"
+  msg_info "Updating ${APP}"
+  cd /opt/archivebox/data
+  pip install --upgrade --ignore-installed archivebox
+  sudo -u archivebox archivebox init
+  msg_ok "Updated ${APP}"
 
-msg_info "Starting ${APP}"
-systemctl start archivebox
-msg_ok "Started ${APP}"
+  msg_info "Starting ${APP}"
+  systemctl start archivebox
+  msg_ok "Started ${APP}"
 
-msg_ok "Updated Successfully"
-exit
+  msg_ok "Updated Successfully"
+  exit
 }
 
 start

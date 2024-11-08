@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
                    ___       __                __        __         ______
   ____ ___  ______/ (_)___  / /_  ____  ____  / /_______/ /_  ___  / / __/
  / __ `/ / / / __  / / __ \/ __ \/ __ \/ __ \/ //_/ ___/ __ \/ _ \/ / /_  
@@ -53,10 +53,13 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -f /etc/apt/trusted.gpg.d/audiobookshelf-ppa.asc ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-echo "This application receives updates through the APT package manager."
-exit
+  header_info
+  if [[ ! -f /etc/apt/trusted.gpg.d/audiobookshelf-ppa.asc ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  echo "This application receives updates through the APT package manager."
+  exit
 }
 
 start

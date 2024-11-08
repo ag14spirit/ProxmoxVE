@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____             __    ____       __         _     __   ______                           __     _________            __
    / __ \___  ____  / /   / __ \___  / /_  _____(_)___/ /  /_  __/___  _____________  ____  / /_   / ____/ (_)__  ____  / /_
   / /_/ / _ \/ __ `/ /___/ / / / _ \/ __ \/ ___/ / __  /    / / / __ \/ ___/ ___/ _ \/ __ \/ __/  / /   / / / _ \/ __ \/ __/
@@ -53,19 +53,22 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/rdtc/ ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP"
-systemctl stop rdtc
-mkdir -p rdtc-backup
-cp -R /opt/rdtc/appsettings.json rdtc-backup/
-wget -q https://github.com/rogerfar/rdt-client/releases/latest/download/RealDebridClient.zip
-unzip -oqq RealDebridClient.zip -d /opt/rdtc
-cp -R rdtc-backup/appsettings.json /opt/rdtc/
-rm -rf rdtc-backup RealDebridClient.zip
-systemctl start rdtc
-msg_ok "Updated $APP"
-exit
+  header_info
+  if [[ ! -d /opt/rdtc/ ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP"
+  systemctl stop rdtc
+  mkdir -p rdtc-backup
+  cp -R /opt/rdtc/appsettings.json rdtc-backup/
+  wget -q https://github.com/rogerfar/rdt-client/releases/latest/download/RealDebridClient.zip
+  unzip -oqq RealDebridClient.zip -d /opt/rdtc
+  cp -R rdtc-backup/appsettings.json /opt/rdtc/
+  rm -rf rdtc-backup RealDebridClient.zip
+  systemctl start rdtc
+  msg_ok "Updated $APP"
+  exit
 }
 
 start

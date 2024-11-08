@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____                 __          __
    / __ \___  ____ _____/ /__  _____/ /__
   / /_/ / _ \/ __ `/ __  / _ \/ ___/ //_/
@@ -53,18 +53,21 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/readeck ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating ${APP}"
-LATEST=$(curl -s https://codeberg.org/readeck/readeck/releases/ | grep -oP '(?<=Version )\d+\.\d+\.\d+' | head -1)
-systemctl stop readeck.service
-rm -rf /opt/readeck/readeck
-cd /opt/readeck
-wget -q -O readeck https://codeberg.org/readeck/readeck/releases/download/${LATEST}/readeck-${LATEST}-linux-amd64
-chmod a+x readeck
-systemctl start readeck.service
-msg_ok "Updated ${APP}"
-exit
+  header_info
+  if [[ ! -d /opt/readeck ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating ${APP}"
+  LATEST=$(curl -s https://codeberg.org/readeck/readeck/releases/ | grep -oP '(?<=Version )\d+\.\d+\.\d+' | head -1)
+  systemctl stop readeck.service
+  rm -rf /opt/readeck/readeck
+  cd /opt/readeck
+  wget -q -O readeck https://codeberg.org/readeck/readeck/releases/download/${LATEST}/readeck-${LATEST}-linux-amd64
+  chmod a+x readeck
+  systemctl start readeck.service
+  msg_ok "Updated ${APP}"
+  exit
 }
 
 start

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
  _____   _       ___          
 /__  /  (_)___  / (_)___  ___ 
   / /  / / __ \/ / / __ \/ _ \
@@ -53,43 +53,46 @@ function default_settings() {
   echo_default
 }
 function update_script() {
-header_info
-if [[ ! -d /opt/zipline ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-fi
-RELEASE=$(curl -s https://api.github.com/repos/diced/zipline/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-  msg_info "Stopping ${APP}"
-  systemctl stop zipline
-  msg_ok "${APP} Stopped"
+  header_info
+  if [[ ! -d /opt/zipline ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  if (($(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80)); then
+    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+  fi
+  RELEASE=$(curl -s https://api.github.com/repos/diced/zipline/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Stopping ${APP}"
+    systemctl stop zipline
+    msg_ok "${APP} Stopped"
 
-  msg_info "Updating ${APP} to ${RELEASE}"
-  cp /opt/zipline/.env /opt/
-  rm -R /opt/zipline
-  wget -q "https://github.com/diced/zipline/archive/refs/tags/v${RELEASE}.zip"
-  unzip -q v${RELEASE}.zip
-  mv zipline-${RELEASE} /opt/zipline
-  cd /opt/zipline
-  mv /opt/.env /opt/zipline/.env
-  yarn install &>/dev/null
-  yarn build &>/dev/null
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated ${APP}"
+    msg_info "Updating ${APP} to ${RELEASE}"
+    cp /opt/zipline/.env /opt/
+    rm -R /opt/zipline
+    wget -q "https://github.com/diced/zipline/archive/refs/tags/v${RELEASE}.zip"
+    unzip -q v${RELEASE}.zip
+    mv zipline-${RELEASE} /opt/zipline
+    cd /opt/zipline
+    mv /opt/.env /opt/zipline/.env
+    yarn install &>/dev/null
+    yarn build &>/dev/null
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated ${APP}"
 
-  msg_info "Starting ${APP}"
-  systemctl start zipline
-  msg_ok "Started ${APP}"
+    msg_info "Starting ${APP}"
+    systemctl start zipline
+    msg_ok "Started ${APP}"
 
-  msg_info "Cleaning Up"
-  rm -rf v${RELEASE}.zip
-  msg_ok "Cleaned"
-  msg_ok "Updated Successfully"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+    msg_info "Cleaning Up"
+    rm -rf v${RELEASE}.zip
+    msg_ok "Cleaned"
+    msg_ok "Updated Successfully"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

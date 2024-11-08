@@ -3,11 +3,11 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-    clear
-    cat <<"EOF"
+  clear
+  cat <<"EOF"
     _   __     __  ____        __
    / | / /__  / /_/ __ \____ _/ /_____ _
   /  |/ / _ \/ __/ / / / __ `/ __/ __ `/
@@ -52,9 +52,9 @@ install() {
   header_info
   read -r -p "Verbose mode? <y/N> " prompt
   if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
-  STD=""
+    STD=""
   else
-  STD="silent"
+    STD="silent"
   fi
   header_info
 
@@ -76,9 +76,9 @@ uninstall() {
   header_info
   read -r -p "Verbose mode? <y/N> " prompt
   if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
-  STD=""
+    STD=""
   else
-  STD="silent"
+    STD="silent"
   fi
   header_info
 
@@ -102,21 +102,21 @@ if ! pveversion | grep -Eq "pve-manager/(8\.[0-9])"; then
   exit
 fi
 
-OPTIONS=(Install "Install NetData on Proxmox VE" \
-         Uninstall "Uninstall NetData from Proxmox VE")
+OPTIONS=(Install "Install NetData on Proxmox VE"
+  Uninstall "Uninstall NetData from Proxmox VE")
 
 CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "NetData" --menu "Select an option:" 10 58 2 \
-          "${OPTIONS[@]}" 3>&1 1>&2 2>&3)
+  "${OPTIONS[@]}" 3>&1 1>&2 2>&3)
 
 case $CHOICE in
-  "Install")
-    install
-    ;;
-  "Uninstall")
-    uninstall
-    ;;
-  *)
-    echo "Exiting..."
-    exit 0
-    ;;
+"Install")
+  install
+  ;;
+"Uninstall")
+  uninstall
+  ;;
+*)
+  echo "Exiting..."
+  exit 0
+  ;;
 esac

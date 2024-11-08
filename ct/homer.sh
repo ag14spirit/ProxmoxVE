@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     __  __                         
    / / / /___  ____ ___  ___  _____
   / /_/ / __ \/ __ `__ \/ _ \/ ___/
@@ -53,39 +53,42 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/homer ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Stopping ${APP}"
-systemctl stop homer
-msg_ok "Stopped ${APP}"
+  header_info
+  if [[ ! -d /opt/homer ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Stopping ${APP}"
+  systemctl stop homer
+  msg_ok "Stopped ${APP}"
 
-msg_info "Backing up assets directory"
-cd ~
-mkdir -p assets-backup
-cp -R /opt/homer/assets/. assets-backup
-msg_ok "Backed up assets directory"
+  msg_info "Backing up assets directory"
+  cd ~
+  mkdir -p assets-backup
+  cp -R /opt/homer/assets/. assets-backup
+  msg_ok "Backed up assets directory"
 
-msg_info "Updating ${APP}"
-rm -rf /opt/homer/*
-cd /opt/homer
-wget -q https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip
-unzip homer.zip &>/dev/null
-msg_ok "Updated ${APP}"
+  msg_info "Updating ${APP}"
+  rm -rf /opt/homer/*
+  cd /opt/homer
+  wget -q https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip
+  unzip homer.zip &>/dev/null
+  msg_ok "Updated ${APP}"
 
-msg_info "Restoring assets directory"
-cd ~
-cp -Rf assets-backup/. /opt/homer/assets/
-msg_ok "Restored assets directory"
+  msg_info "Restoring assets directory"
+  cd ~
+  cp -Rf assets-backup/. /opt/homer/assets/
+  msg_ok "Restored assets directory"
 
-msg_info "Cleaning"
-rm -rf assets-backup /opt/homer/homer.zip
-msg_ok "Cleaned"
+  msg_info "Cleaning"
+  rm -rf assets-backup /opt/homer/homer.zip
+  msg_ok "Cleaned"
 
-msg_info "Starting ${APP}"
-systemctl start homer
-msg_ok "Started ${APP}"
-msg_ok "Updated Successfully"
-exit
+  msg_info "Starting ${APP}"
+  systemctl start homer
+  msg_ok "Started ${APP}"
+  msg_ok "Updated Successfully"
+  exit
 }
 
 start

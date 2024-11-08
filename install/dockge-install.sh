@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -75,7 +75,7 @@ services:
     privileged: true
     network_mode: host
 EOF
-msg_ok "Added Home Assistant compose.yaml"
+  msg_ok "Added Home Assistant compose.yaml"
 fi
 
 motd_ssh

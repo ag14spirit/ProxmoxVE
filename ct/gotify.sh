@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
    ______      __  _ ____
   / ____/___  / /_(_) __/_  __
  / / __/ __ \/ __/ / /_/ / / /
@@ -53,32 +53,35 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/gotify ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
+  header_info
+  if [[ ! -d /opt/gotify ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
 
-RELEASE=$(curl -s https://api.github.com/repos/gotify/server/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-  msg_info "Stopping ${APP}"
-  systemctl stop gotify
-  msg_ok "Stopped ${APP}"
+  RELEASE=$(curl -s https://api.github.com/repos/gotify/server/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Stopping ${APP}"
+    systemctl stop gotify
+    msg_ok "Stopped ${APP}"
 
-  msg_info "Updating ${APP} to ${RELEASE}"
-  cd /opt/gotify
-  wget -q https://github.com/gotify/server/releases/download/v${RELEASE}/gotify-linux-amd64.zip
-  unzip -oq gotify-linux-amd64.zip
-  rm -rf gotify-linux-amd64.zip
-  chmod +x gotify-linux-amd64
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated ${APP} to ${RELEASE}"
+    msg_info "Updating ${APP} to ${RELEASE}"
+    cd /opt/gotify
+    wget -q https://github.com/gotify/server/releases/download/v${RELEASE}/gotify-linux-amd64.zip
+    unzip -oq gotify-linux-amd64.zip
+    rm -rf gotify-linux-amd64.zip
+    chmod +x gotify-linux-amd64
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated ${APP} to ${RELEASE}"
 
-  msg_info "Starting ${APP}"
-  systemctl start gotify
-  msg_ok "Started ${APP}"
-  msg_ok "Updated Successfully"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+    msg_info "Starting ${APP}"
+    systemctl start gotify
+    msg_ok "Started ${APP}"
+    msg_ok "Updated Successfully"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

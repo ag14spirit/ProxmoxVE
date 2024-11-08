@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
    ____
   / __ \_   _____  _____________  ___  __________
  / / / / | / / _ \/ ___/ ___/ _ \/ _ \/ ___/ ___/
@@ -53,24 +53,26 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/overseerr ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP"
-systemctl stop overseerr
-cd /opt/overseerr
-output=$(git pull)
-git pull &>/dev/null
-if echo "$output" | grep -q "Already up to date."
-then
-  msg_ok " $APP is already up to date."
+  header_info
+  if [[ ! -d /opt/overseerr ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP"
+  systemctl stop overseerr
+  cd /opt/overseerr
+  output=$(git pull)
+  git pull &>/dev/null
+  if echo "$output" | grep -q "Already up to date."; then
+    msg_ok " $APP is already up to date."
+    systemctl start overseerr
+    exit
+  fi
+  yarn install &>/dev/null
+  yarn build &>/dev/null
   systemctl start overseerr
+  msg_ok "Updated $APP"
   exit
-fi
-yarn install &>/dev/null
-yarn build &>/dev/null
-systemctl start overseerr
-msg_ok "Updated $APP"
-exit
 }
 
 start

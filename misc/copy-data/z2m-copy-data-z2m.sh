@@ -3,12 +3,15 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 # Use to copy all data from one Zigbee2MQTT LXC to another
 # run from the Proxmox Shell
 clear
-if ! command -v pveversion >/dev/null 2>&1; then echo -e "⚠️  Run from the Proxmox Shell"; exit; fi
+if ! command -v pveversion >/dev/null 2>&1; then
+  echo -e "⚠️  Run from the Proxmox Shell"
+  exit
+fi
 while true; do
   read -p "Use to copy all data from one Zigbee2MQTT LXC to another. Proceed(y/n)?" yn
   case $yn in
@@ -125,4 +128,4 @@ info "Successfully Transferred Data."
 
 # Use to copy all data from one Zigbee2MQTT LXC to another
 # run from the Proxmox Shell
-# bash -c "$(wget -qLO - https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/copy-data/z2m-copy-data-z2m.sh)"
+# bash -c "$(wget -qLO - https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/copy-data/z2m-copy-data-z2m.sh)"

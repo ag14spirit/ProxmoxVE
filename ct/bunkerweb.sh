@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____              __            _       __     __
    / __ )__  ______  / /_____  ____| |     / /__  / /_
   / __  / / / / __ \/ //_/ _ \/ ___/ | /| / / _ \/ __ \
@@ -53,28 +53,31 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /etc/bunkerweb ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
+  header_info
+  if [[ ! -d /etc/bunkerweb ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
 
-RELEASE=$(curl -s https://api.github.com/repos/bunkerity/bunkerweb/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+  RELEASE=$(curl -s https://api.github.com/repos/bunkerity/bunkerweb/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
 
-  msg_info "Updating ${APP} to ${RELEASE}"
-  cat <<EOF >/etc/apt/preferences.d/bunkerweb
+    msg_info "Updating ${APP} to ${RELEASE}"
+    cat <<EOF >/etc/apt/preferences.d/bunkerweb
 Package: bunkerweb
 Pin: version ${RELEASE}
 Pin-Priority: 1001
 EOF
-  apt-get update
-  apt-get install -y nginx=1.26.2*
-  apt-get install -y bunkerweb=${RELEASE}
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated ${APP} to ${RELEASE}"
+    apt-get update
+    apt-get install -y nginx=1.26.2*
+    apt-get install -y bunkerweb=${RELEASE}
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated ${APP} to ${RELEASE}"
 
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

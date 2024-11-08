@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -25,7 +25,7 @@ wget -q https://github.com/traccar/traccar/releases/download/v${RELEASE}/traccar
 $STD unzip traccar-linux-64-${RELEASE}.zip
 $STD ./traccar.run
 systemctl enable -q --now traccar
-rm -rf README.txt  traccar-linux-64-${RELEASE}.zip  traccar.run
+rm -rf README.txt traccar-linux-64-${RELEASE}.zip traccar.run
 msg_ok "Installed Traccar v${RELEASE}"
 
 motd_ssh

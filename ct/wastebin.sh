@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/matze/wastebin
 
-
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
  _       __           __       __    _     
 | |     / /___ ______/ /____  / /_  (_)___ 
 | | /| / / __ `/ ___/ __/ _ \/ __ \/ / __ \
@@ -56,34 +55,37 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/wastebin ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-RELEASE=$(curl -s https://api.github.com/repos/matze/wastebin/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-  msg_info "Stopping Wastebin"
-  systemctl stop wastebin
-  msg_ok "Wastebin Stopped"
+  header_info
+  if [[ ! -d /opt/wastebin ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  RELEASE=$(curl -s https://api.github.com/repos/matze/wastebin/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Stopping Wastebin"
+    systemctl stop wastebin
+    msg_ok "Wastebin Stopped"
 
-  msg_info "Updating Wastebin"
-  wget -q https://github.com/matze/wastebin/releases/download/${RELEASE}/wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
-  tar -xf wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
-  cp -f wastebin /opt/wastebin/
-  chmod +x /opt/wastebin/wastebin
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated Wastebin"
+    msg_info "Updating Wastebin"
+    wget -q https://github.com/matze/wastebin/releases/download/${RELEASE}/wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
+    tar -xf wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
+    cp -f wastebin /opt/wastebin/
+    chmod +x /opt/wastebin/wastebin
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated Wastebin"
 
-  msg_info "Starting Wastebin"
-  systemctl start wastebin
-  msg_ok "Started Wastebin"
+    msg_info "Starting Wastebin"
+    systemctl start wastebin
+    msg_ok "Started Wastebin"
 
-  msg_info "Cleaning Up"
-  rm -rf wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
-  msg_ok "Cleaned"
-  msg_ok "Updated Successfully"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+    msg_info "Cleaning Up"
+    rm -rf wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
+    msg_ok "Cleaned"
+    msg_ok "Updated Successfully"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

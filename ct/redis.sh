@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____           ___     
    / __ \___  ____/ (_)____
   / /_/ / _ \/ __  / / ___/
@@ -54,10 +54,13 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -f /lib/systemd/system/redis-server.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_error "There is currently no update path available."
-exit
+  header_info
+  if [[ ! -f /lib/systemd/system/redis-server.service ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_error "There is currently no update path available."
+  exit
 }
 
 start

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: havardthom
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"     
+  clear
+  cat <<"EOF"
    ____  ____
   / __ \/ / /___ _____ ___  ____ _
  / / / / / / __ `/ __ `__ \/ __ `/
@@ -54,13 +54,16 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/ollama ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating ${APP}"
-apt-get update &>/dev/null
-apt-get -y upgrade &>/dev/null
-msg_ok "Updated Successfully"
-exit
+  header_info
+  if [[ ! -d /opt/ollama ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating ${APP}"
+  apt-get update &>/dev/null
+  apt-get -y upgrade &>/dev/null
+  msg_ok "Updated Successfully"
+  exit
 }
 
 start

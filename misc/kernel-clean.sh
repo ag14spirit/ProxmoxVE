@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
   clear
@@ -45,8 +45,8 @@ if [ -z "$available_kernels" ]; then
   clear
   exit
 fi
-  KERNEL_MENU=()
-  MSG_MAX_LENGTH=0
+KERNEL_MENU=()
+MSG_MAX_LENGTH=0
 while read -r TAG ITEM; do
   OFFSET=2
   ((${#ITEM} + OFFSET > MSG_MAX_LENGTH)) && MSG_MAX_LENGTH=${#ITEM}+OFFSET

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____                                          ____             __                  _____
    / __ \_________  _  ______ ___  ____  _  __   / __ )____ ______/ /____  ______     / ___/___  ______   _____  _____
   / /_/ / ___/ __ \| |/_/ __ `__ \/ __ \| |/_/  / __  / __ `/ ___/ //_/ / / / __ \    \__ \/ _ \/ ___/ | / / _ \/ ___/
@@ -54,13 +54,16 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /var ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP LXC"
-apt-get update &>/dev/null
-apt-get -y upgrade &>/dev/null
-msg_ok "Updated $APP LXC"
-exit
+  header_info
+  if [[ ! -d /var ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP LXC"
+  apt-get update &>/dev/null
+  apt-get -y upgrade &>/dev/null
+  msg_ok "Updated $APP LXC"
+  exit
 }
 
 start

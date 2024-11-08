@@ -4,9 +4,9 @@
 # Author: tteck (tteckster)
 # Co-author: Rogue-King
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -27,7 +27,7 @@ RELEASE=$(wget -q https://github.com/go-gitea/gitea/releases/latest -O - | grep 
 wget -q https://github.com/go-gitea/gitea/releases/download/v$RELEASE/gitea-$RELEASE-linux-amd64
 mv gitea* /usr/local/bin/gitea
 chmod +x /usr/local/bin/gitea
-adduser --system --group --disabled-password --shell /bin/bash --home /etc/gitea gitea > /dev/null
+adduser --system --group --disabled-password --shell /bin/bash --home /etc/gitea gitea >/dev/null
 mkdir -p /var/lib/gitea/{custom,data,log}
 chown -R gitea:gitea /var/lib/gitea/
 chmod -R 750 /var/lib/gitea/

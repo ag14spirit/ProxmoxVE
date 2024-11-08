@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
    _____                   __                    
   / ___/____  ____  ____  / /___ ___  ____ _____ 
   \__ \/ __ \/ __ \/ __ \/ / __ `__ \/ __ `/ __ \
@@ -54,44 +54,47 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/spoolman ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-fi
-RELEASE=$(wget -q https://github.com/Donkie/Spoolman/releases/latest -O - | grep "title>Release" | cut -d " " -f 4)
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+  header_info
+  if [[ ! -d /opt/spoolman ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  if (($(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80)); then
+    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+  fi
+  RELEASE=$(wget -q https://github.com/Donkie/Spoolman/releases/latest -O - | grep "title>Release" | cut -d " " -f 4)
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
 
-  msg_info "Stopping ${APP} Service"
-  systemctl stop spoolman
-  msg_ok "Stopped ${APP} Service"
+    msg_info "Stopping ${APP} Service"
+    systemctl stop spoolman
+    msg_ok "Stopped ${APP} Service"
 
-  msg_info "Updating ${APP} to ${RELEASE}"
-  cd /opt
-  rm -rf spoolman_bak
-  mv spoolman spoolman_bak
-  wget -q https://github.com/Donkie/Spoolman/releases/download/${RELEASE}/spoolman.zip 
-  unzip -q spoolman.zip -d spoolman
-  cd spoolman
-  pip3 install -r requirements.txt >/dev/null 2>&1
-  wget -q https://raw.githubusercontent.com/Donkie/Spoolman/master/.env.example -O .env
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated ${APP} to ${RELEASE}"
+    msg_info "Updating ${APP} to ${RELEASE}"
+    cd /opt
+    rm -rf spoolman_bak
+    mv spoolman spoolman_bak
+    wget -q https://github.com/Donkie/Spoolman/releases/download/${RELEASE}/spoolman.zip
+    unzip -q spoolman.zip -d spoolman
+    cd spoolman
+    pip3 install -r requirements.txt >/dev/null 2>&1
+    wget -q https://raw.githubusercontent.com/Donkie/Spoolman/master/.env.example -O .env
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated ${APP} to ${RELEASE}"
 
-  msg_info "Starting ${APP} Service"
-  systemctl start spoolman
-  msg_ok "Started ${APP} Service"
+    msg_info "Starting ${APP} Service"
+    systemctl start spoolman
+    msg_ok "Started ${APP} Service"
 
-  msg_info "Cleaning up"
-  rm -rf /opt/spoolman.zip
-  msg_ok "Cleaned"
+    msg_info "Cleaning up"
+    rm -rf /opt/spoolman.zip
+    msg_ok "Cleaned"
 
-  msg_ok "Updated Successfully!\n"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+    msg_ok "Updated Successfully!\n"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

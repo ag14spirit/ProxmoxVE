@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -41,7 +41,7 @@ sed -i -e 's/^sgx:x:104:$/render:x:104:root/' -e 's/^render:x:106:root$/sgx:x:10
 msg_ok "Installed Unmanic"
 
 msg_info "Creating Service"
-cat << EOF >/etc/systemd/system/unmanic.service
+cat <<EOF >/etc/systemd/system/unmanic.service
 [Unit]
 Description=Unmanic - Library Optimiser
 After=network-online.target

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     __  __
    / / / /___  ____ ___  ____ ___________
   / /_/ / __ \/ __ `__ \/ __ `/ ___/ ___/
@@ -54,46 +54,49 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/homarr ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-fi
-RELEASE=$(curl -s https://api.github.com/repos/ajnart/homarr/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-  msg_info "Stopping Services"
-  systemctl stop homarr
-  msg_ok "Services Stopped"
+  header_info
+  if [[ ! -d /opt/homarr ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  if (($(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80)); then
+    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+  fi
+  RELEASE=$(curl -s https://api.github.com/repos/ajnart/homarr/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Stopping Services"
+    systemctl stop homarr
+    msg_ok "Services Stopped"
 
-  msg_info "Updating ${APP} to ${RELEASE}"
-  cp /opt/homarr/.env /opt/.env
-  cp -a /opt/homarr/data /opt/
-  rm -rf /opt/homarr
-  wget -q "https://github.com/ajnart/homarr/archive/refs/tags/v${RELEASE}.zip"
-  unzip -q v${RELEASE}.zip
-  mv homarr-${RELEASE} /opt/homarr
-  mv /opt/.env /opt/homarr/.env
-  rm -rf /opt/homarr/data
-  mv /opt/data /opt/homarr/
-  yarn install &>/dev/null
-  yarn build &>/dev/null
-  yarn db:migrate &>/dev/null
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated ${APP}"
+    msg_info "Updating ${APP} to ${RELEASE}"
+    cp /opt/homarr/.env /opt/.env
+    cp -a /opt/homarr/data /opt/
+    rm -rf /opt/homarr
+    wget -q "https://github.com/ajnart/homarr/archive/refs/tags/v${RELEASE}.zip"
+    unzip -q v${RELEASE}.zip
+    mv homarr-${RELEASE} /opt/homarr
+    mv /opt/.env /opt/homarr/.env
+    rm -rf /opt/homarr/data
+    mv /opt/data /opt/homarr/
+    yarn install &>/dev/null
+    yarn build &>/dev/null
+    yarn db:migrate &>/dev/null
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated ${APP}"
 
-  msg_info "Starting Services"
-  systemctl start homarr
-  msg_ok "Started Services"
+    msg_info "Starting Services"
+    systemctl start homarr
+    msg_ok "Started Services"
 
-  msg_info "Cleaning Up"
-  rm -rf v${RELEASE}.zip
-  msg_ok "Cleaned"
-  msg_ok "Updated Successfully"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+    msg_info "Cleaning Up"
+    rm -rf v${RELEASE}.zip
+    msg_ok "Cleaned"
+    msg_ok "Updated Successfully"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

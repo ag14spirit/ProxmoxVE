@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: havardthom
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"     
+  clear
+  cat <<"EOF"
    ____                      _       __     __    __  ______
   / __ \____  ___  ____     | |     / /__  / /_  / / / /  _/
  / / / / __ \/ _ \/ __ \    | | /| / / _ \/ __ \/ / / // /
@@ -55,25 +55,27 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/open-webui ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating ${APP} (Patience)"
-cd /opt/open-webui
-output=$(git pull --no-rebase)
-if echo "$output" | grep -q "Already up to date."
-then
-  msg_ok "$APP is already up to date."
+  header_info
+  if [[ ! -d /opt/open-webui ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating ${APP} (Patience)"
+  cd /opt/open-webui
+  output=$(git pull --no-rebase)
+  if echo "$output" | grep -q "Already up to date."; then
+    msg_ok "$APP is already up to date."
+    exit
+  fi
+  systemctl stop open-webui.service
+  npm install &>/dev/null
+  export NODE_OPTIONS="--max-old-space-size=3584"
+  npm run build &>/dev/null
+  cd ./backend
+  pip install -r requirements.txt -U &>/dev/null
+  systemctl start open-webui.service
+  msg_ok "Updated Successfully"
   exit
-fi
-systemctl stop open-webui.service
-npm install &>/dev/null
-export NODE_OPTIONS="--max-old-space-size=3584"
-npm run build &>/dev/null
-cd ./backend
-pip install -r requirements.txt -U &>/dev/null
-systemctl start open-webui.service
-msg_ok "Updated Successfully"
-exit
 }
 
 start

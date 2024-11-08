@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
  _____
 /__  /  ____  _________ __  ____  __
   / /  / __ \/ ___/ __ `/ |/_/ / / /
@@ -53,23 +53,26 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/zoraxy/ ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-RELEASE=$(curl -s https://api.github.com/repos/tobychui/zoraxy/releases/latest  | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-  msg_info "Updating $APP to ${RELEASE}"
-  systemctl stop zoraxy
-  wget -q "https://github.com/tobychui/zoraxy/releases/download/${RELEASE}/zoraxy_linux_amd64"
-  rm -rf /opt/zoraxy/zoraxy
-  mv zoraxy_linux_amd64 /opt/zoraxy/zoraxy
-  chmod +x /opt/zoraxy/zoraxy
-  systemctl start zoraxy
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated $APP"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
- fi
- exit
+  header_info
+  if [[ ! -d /opt/zoraxy/ ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  RELEASE=$(curl -s https://api.github.com/repos/tobychui/zoraxy/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Updating $APP to ${RELEASE}"
+    systemctl stop zoraxy
+    wget -q "https://github.com/tobychui/zoraxy/releases/download/${RELEASE}/zoraxy_linux_amd64"
+    rm -rf /opt/zoraxy/zoraxy
+    mv zoraxy_linux_amd64 /opt/zoraxy/zoraxy
+    chmod +x /opt/zoraxy/zoraxy
+    systemctl start zoraxy
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated $APP"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

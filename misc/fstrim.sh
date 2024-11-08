@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info() {
   clear
@@ -26,8 +26,8 @@ echo "Loading..."
 
 ROOT_FS=$(df -Th "/" | awk 'NR==2 {print $2}')
 if [ "$ROOT_FS" != "ext4" ]; then
-    echo "Root filesystem is not ext4. Exiting script."
-    exit 1
+  echo "Root filesystem is not ext4. Exiting script."
+  exit 1
 fi
 
 whiptail --backtitle "Proxmox VE Helper Scripts" --title "Proxmox VE LXC Filesystem Trim" --yesno "The LXC containers will undergo the fstrim command. Proceed?" 10 58 || exit
@@ -40,7 +40,7 @@ while read -r TAG ITEM; do
   EXCLUDE_MENU+=("$TAG" "$ITEM " "OFF")
 done < <(pct list | awk 'NR>1')
 excluded_containers=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Containers on $NODE" --checklist "\nSelect containers to skip from trimming:\n" \
-  16 $((MSG_MAX_LENGTH + 23)) 6 "${EXCLUDE_MENU[@]}" 3>&1 1>&2 2>&3 | tr -d '"') || exit  
+  16 $((MSG_MAX_LENGTH + 23)) 6 "${EXCLUDE_MENU[@]}" 3>&1 1>&2 2>&3 | tr -d '"') || exit
 
 function trim_container() {
   local container=$1
@@ -53,8 +53,6 @@ function trim_container() {
   echo -e "${GN}Data after trim $after_trim%${CL}"
   sleep 1.5
 }
-
-
 
 for container in $(pct list | awk '{if(NR>1) print $1}'); do
   if [[ " ${excluded_containers[@]} " =~ " $container " ]]; then
@@ -69,7 +67,7 @@ for container in $(pct list | awk '{if(NR>1) print $1}'); do
       sleep 1
       continue
     fi
-      trim_container $container
+    trim_container $container
   fi
 done
 

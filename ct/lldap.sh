@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # Co-Author: remz1337
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____    __          
    / / /___/ /___ _____ 
   / / / __  / __ `/ __ \
@@ -55,13 +55,16 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -f /etc/systemd/system/lldap.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP"
-apt update
-apt upgrade -y lldap
-msg_ok "Updated $APP"
-exit
+  header_info
+  if [[ ! -f /etc/systemd/system/lldap.service ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP"
+  apt update
+  apt upgrade -y lldap
+  msg_ok "Updated $APP"
+  exit
 }
 
 start

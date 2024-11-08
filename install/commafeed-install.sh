@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -58,7 +58,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf commafeed-${RELEASE}-h2  commafeed-${RELEASE}-h2-jvm.zip  zulu-repo_1.0.0-3_all.deb
+rm -rf commafeed-${RELEASE}-h2 commafeed-${RELEASE}-h2-jvm.zip zulu-repo_1.0.0-3_all.deb
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -38,7 +38,7 @@ $STD git clone https://github.com/actualbudget/actual-server.git /opt/actualbudg
 mkdir -p /opt/actualbudget/server-files
 chown -R root:root /opt/actualbudget/server-files
 chmod 755 /opt/actualbudget/server-files
-cat <<EOF > /opt/actualbudget/.env
+cat <<EOF >/opt/actualbudget/.env
 ACTUAL_UPLOAD_DIR=/opt/actualbudget/server-files
 PORT=5006
 EOF

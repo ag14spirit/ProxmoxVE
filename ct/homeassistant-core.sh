@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
   clear
@@ -117,7 +117,7 @@ function update_script() {
       filebrowser config init -a '0.0.0.0' &>/dev/null
       filebrowser config set -a '0.0.0.0' &>/dev/null
       filebrowser config set --auth.method=noauth &>/dev/null
-      filebrowser users add ID 1 --perm.admin &>/dev/null  
+      filebrowser users add ID 1 --perm.admin &>/dev/null
     else
       filebrowser config init -a '0.0.0.0' &>/dev/null
       filebrowser config set -a '0.0.0.0' &>/dev/null

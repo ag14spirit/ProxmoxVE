@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ________              _           ___    ____
    / ____/ /___ _      __(_)_______  /   |  /  _/
   / /_  / / __ \ | /| / / / ___/ _ \/ /| |  / /
@@ -53,15 +53,18 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -f /etc/systemd/system/flowise.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox --title "SET RESOURCES" "Please set the resources in your ${APP} LXC to ${var_cpu}vCPU and ${var_ram}RAM for the build process before continuing" 10 75
-msg_info "Updating ${APP}"
-systemctl stop flowise
-npm install -g flowise --upgrade
-systemctl start flowise
-msg_ok "Updated ${APP}"
-exit
+  header_info
+  if [[ ! -f /etc/systemd/system/flowise.service ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox --title "SET RESOURCES" "Please set the resources in your ${APP} LXC to ${var_cpu}vCPU and ${var_ram}RAM for the build process before continuing" 10 75
+  msg_info "Updating ${APP}"
+  systemctl stop flowise
+  npm install -g flowise --upgrade
+  systemctl start flowise
+  msg_ok "Updated ${APP}"
+  exit
 }
 
 start

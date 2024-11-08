@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     __  ___   ______      __       
    /  |/  /__/_  __/_  __/ /_  ___ 
   / /|_/ / _ \/ / / / / / __ \/ _ \
@@ -53,42 +53,45 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/metube ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-fi
-msg_info "Stopping ${APP} Service"
-systemctl stop metube
-msg_ok "Stopped ${APP} Service"
+  header_info
+  if [[ ! -d /opt/metube ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  if (($(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80)); then
+    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+  fi
+  msg_info "Stopping ${APP} Service"
+  systemctl stop metube
+  msg_ok "Stopped ${APP} Service"
 
-msg_info "Updating ${APP} to latest Git"
-cd /opt
-if [ -d metube_bak ]; then
-  rm -rf metube_bak
-fi
-mv metube metube_bak
-git clone https://github.com/alexta69/metube /opt/metube  >/dev/null 2>&1
-cd /opt/metube/ui
-npm install >/dev/null 2>&1
-node_modules/.bin/ng build >/dev/null 2>&1
-cd /opt/metube
-cp /opt/metube_bak/.env /opt/metube/
-pip3 install pipenv >/dev/null 2>&1
-pipenv install >/dev/null 2>&1
+  msg_info "Updating ${APP} to latest Git"
+  cd /opt
+  if [ -d metube_bak ]; then
+    rm -rf metube_bak
+  fi
+  mv metube metube_bak
+  git clone https://github.com/alexta69/metube /opt/metube >/dev/null 2>&1
+  cd /opt/metube/ui
+  npm install >/dev/null 2>&1
+  node_modules/.bin/ng build >/dev/null 2>&1
+  cd /opt/metube
+  cp /opt/metube_bak/.env /opt/metube/
+  pip3 install pipenv >/dev/null 2>&1
+  pipenv install >/dev/null 2>&1
 
-if [ -d "/opt/metube_bak" ]; then
-rm -rf /opt/metube_bak
-fi
-msg_ok "Updated ${APP} to latest Git"
+  if [ -d "/opt/metube_bak" ]; then
+    rm -rf /opt/metube_bak
+  fi
+  msg_ok "Updated ${APP} to latest Git"
 
-msg_info "Starting ${APP} Service"
-systemctl start metube
-sleep 1
-msg_ok "Started ${APP} Service"
-msg_ok "Updated Successfully!\n"
-exit
+  msg_info "Starting ${APP} Service"
+  systemctl start metube
+  sleep 1
+  msg_ok "Started ${APP} Service"
+  msg_ok "Updated Successfully!\n"
+  exit
 }
 
 start

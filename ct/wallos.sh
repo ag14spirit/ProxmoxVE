@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
  _       __      ____          
 | |     / /___ _/ / /___  _____
 | | /| / / __ `/ / / __ \/ ___/
@@ -54,41 +54,44 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/wallos ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-fi
-RELEASE=$(curl -s https://api.github.com/repos/ellite/Wallos/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-  msg_info "Updating ${APP} to ${RELEASE}"
-  cd /opt
-  wget -q "https://github.com/ellite/Wallos/archive/refs/tags/v${RELEASE}.zip"
-  mv /opt/wallos/db/wallos.db /opt/wallos.db
-  unzip -q v${RELEASE}.zip
-  rm -rf /opt/wallos
-  mv Wallos-${RELEASE} /opt/wallos
-  rm -rf /opt/wallos/db/wallos.empty.db
-  mv /opt/wallos.db /opt/wallos/db/wallos.db
-  chown -R www-data:www-data /opt/wallos
-  chmod -R 755 /opt/wallos
-  curl http://localhost/endpoints/db/migrate.php &>/dev/null
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated ${APP}"
+  header_info
+  if [[ ! -d /opt/wallos ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  if (($(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80)); then
+    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+  fi
+  RELEASE=$(curl -s https://api.github.com/repos/ellite/Wallos/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Updating ${APP} to ${RELEASE}"
+    cd /opt
+    wget -q "https://github.com/ellite/Wallos/archive/refs/tags/v${RELEASE}.zip"
+    mv /opt/wallos/db/wallos.db /opt/wallos.db
+    unzip -q v${RELEASE}.zip
+    rm -rf /opt/wallos
+    mv Wallos-${RELEASE} /opt/wallos
+    rm -rf /opt/wallos/db/wallos.empty.db
+    mv /opt/wallos.db /opt/wallos/db/wallos.db
+    chown -R www-data:www-data /opt/wallos
+    chmod -R 755 /opt/wallos
+    curl http://localhost/endpoints/db/migrate.php &>/dev/null
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated ${APP}"
 
-  msg_info "Reload Apache2"
-  systemctl reload apache2
-  msg_ok "Apache2 Reloaded"
+    msg_info "Reload Apache2"
+    systemctl reload apache2
+    msg_ok "Apache2 Reloaded"
 
-  msg_info "Cleaning Up"
-  rm -R /opt/v${RELEASE}.zip 
-  msg_ok "Cleaned"
-  msg_ok "Updated Successfully"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+    msg_info "Cleaning Up"
+    rm -R /opt/v${RELEASE}.zip
+    msg_ok "Cleaned"
+    msg_ok "Updated Successfully"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

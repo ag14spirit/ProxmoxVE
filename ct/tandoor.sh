@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
   ______                __                    ____            _
  /_  __/___ _____  ____/ /___  ____  _____   / __ \___  _____(_)___  ___  _____
   / / / __ `/ __ \/ __  / __ \/ __ \/ ___/  / /_/ / _ \/ ___/ / __ \/ _ \/ ___/
@@ -55,7 +55,10 @@ function default_settings() {
 
 function update_script() {
   header_info
-  if [[ ! -d /opt/tandoor ]]; then msg_error "No ${APP} Installation Found!"; exit; fi 
+  if [[ ! -d /opt/tandoor ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
   whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox --title "SET RESOURCES" "Please set the resources in your ${APP} LXC to ${var_cpu}vCPU and ${var_ram}RAM for the build process before continuing" 10 75
   if cd /opt/tandoor && git pull | grep -q 'Already up to date'; then
     msg_ok "There is currently no update available."

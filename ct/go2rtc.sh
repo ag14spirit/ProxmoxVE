@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
                ___        __      
    ____ _____ |__ \ _____/ /______
   / __ `/ __ \__/ // ___/ __/ ___/
@@ -54,17 +54,20 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/go2rtc ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP"
-systemctl stop go2rtc
-cd /opt/go2rtc
-rm go2rtc_linux_amd64
-wget -q https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_amd64
-chmod +x go2rtc_linux_amd64
-systemctl start go2rtc
-msg_ok "Updated $APP"
-exit
+  header_info
+  if [[ ! -d /opt/go2rtc ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP"
+  systemctl stop go2rtc
+  cd /opt/go2rtc
+  rm go2rtc_linux_amd64
+  wget -q https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_amd64
+  chmod +x go2rtc_linux_amd64
+  systemctl start go2rtc
+  msg_ok "Updated $APP"
+  exit
 }
 
 start

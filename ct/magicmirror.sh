@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     __  ___            _      __  ____                     
    /  |/  /___ _____ _(_)____/  |/  (_)_____________  _____
   / /|_/ / __  / __  / / ___/ /|_/ / / ___/ ___/ __ \/ ___/
@@ -54,8 +54,11 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/magicmirror ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
+  header_info
+  if [[ ! -d /opt/magicmirror ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
   if [[ "$(node -v | cut -d 'v' -f 2)" == "18."* ]]; then
     if ! command -v npm >/dev/null 2>&1; then
       echo "Installing NPM..."
@@ -63,12 +66,12 @@ if [[ ! -d /opt/magicmirror ]]; then msg_error "No ${APP} Installation Found!"; 
       echo "Installed NPM..."
     fi
   fi
-msg_info "Updating ${APP} LXC"
-cd /opt/magicmirror
-git pull &>/dev/null
-npm install --only=prod --omit=dev &>/dev/null
-msg_ok "Updated Successfully"
-exit
+  msg_info "Updating ${APP} LXC"
+  cd /opt/magicmirror
+  git pull &>/dev/null
+  npm install --only=prod --omit=dev &>/dev/null
+  msg_ok "Updated Successfully"
+  exit
 }
 
 start

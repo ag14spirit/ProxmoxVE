@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -49,7 +49,7 @@ $STD pip3 install \
   opencv-python-headless \
   unoconv \
   pngquant \
-  WeasyPrint 
+  WeasyPrint
 msg_ok "Installed Python Dependencies"
 
 msg_info "Installing Azul Zulu"

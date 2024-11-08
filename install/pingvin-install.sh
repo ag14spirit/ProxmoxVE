@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -37,7 +37,7 @@ msg_info "Installing Pingvin Share (Patience)"
 git clone -q https://github.com/stonith404/pingvin-share /opt/pingvin-share
 cd /opt/pingvin-share
 $STD git fetch --tags
-$STD git checkout $(git describe --tags `git rev-list --tags --max-count=1`)
+$STD git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
 cd backend
 $STD npm install
 $STD npm run build
@@ -48,7 +48,7 @@ $STD npm install
 $STD npm run build
 $STD pm2 start --name="pingvin-share-frontend" npm -- run start
 # create and enable pm2-root systemd script
-$STD pm2 startup systemd 
+$STD pm2 startup systemd
 # save running pm2 processes so pingvin-share can survive reboots
 $STD pm2 save
 msg_ok "Installed Pingvin Share"

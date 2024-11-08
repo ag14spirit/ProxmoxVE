@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ___    __      _          
    /   |  / /___  (_)___  ___ 
   / /| | / / __ \/ / __ \/ _ \
@@ -54,15 +54,15 @@ function default_settings() {
 }
 
 function update_script() {
-UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 1 \
-  "1" "Check for Alpine Updates" ON \
-  3>&1 1>&2 2>&3)
+  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 1 \
+    "1" "Check for Alpine Updates" ON \
+    3>&1 1>&2 2>&3)
 
-header_info
-if [ "$UPD" == "1" ]; then
-apk update && apk upgrade
-exit;
-fi
+  header_info
+  if [ "$UPD" == "1" ]; then
+    apk update && apk upgrade
+    exit
+  fi
 }
 
 start

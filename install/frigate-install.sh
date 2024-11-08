@@ -4,7 +4,7 @@
 # Author: tteck (tteckster)
 # Co-Author: remz1337
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -51,7 +51,7 @@ msg_ok "Set Up Hardware Acceleration"
 RELEASE=$(curl -s https://api.github.com/repos/blakeblackshear/frigate/releases/latest | jq -r '.tag_name')
 msg_ok "Stop spinner to prevent segmentation fault"
 msg_info "Installing Frigate $RELEASE (Perseverance)"
-if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID > /dev/null; then kill $SPINNER_PID > /dev/null; fi
+if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID >/dev/null; then kill $SPINNER_PID >/dev/null; fi
 cd ~
 mkdir -p /opt/frigate/models
 wget -q https://github.com/blakeblackshear/frigate/archive/refs/tags/${RELEASE}.tar.gz -O frigate.tar.gz
@@ -101,7 +101,7 @@ if [[ "$CTTYPE" == "0" ]]; then
 else
   sed -i -e 's/^kvm:x:104:$/render:x:104:frigate/' -e 's/^render:x:105:$/kvm:x:105:/' /etc/group
 fi
-echo "tmpfs   /tmp/cache      tmpfs   defaults        0       0" >> /etc/fstab
+echo "tmpfs   /tmp/cache      tmpfs   defaults        0       0" >>/etc/fstab
 msg_ok "Installed Frigate $RELEASE"
 
 if grep -q -o -m1 'avx[^ ]*' /proc/cpuinfo; then
@@ -151,7 +151,7 @@ $STD ./configure --disable-udev --enable-shared
 $STD make -j $(nproc --all)
 cd /opt/frigate/libusb-1.0.26/libusb
 mkdir -p /usr/local/lib
-$STD /bin/bash ../libtool  --mode=install /usr/bin/install -c libusb-1.0.la '/usr/local/lib'
+$STD /bin/bash ../libtool --mode=install /usr/bin/install -c libusb-1.0.la '/usr/local/lib'
 mkdir -p /usr/local/include/libusb-1.0
 $STD /usr/bin/install -c -m 644 libusb.h '/usr/local/include/libusb-1.0'
 ldconfig
@@ -171,7 +171,7 @@ msg_ok "Installed Coral Object Detection Model"
 msg_info "Building Nginx with Custom Modules"
 $STD /opt/frigate/docker/main/build_nginx.sh
 sed -e '/s6-notifyoncheck/ s/^#*/#/' -i /opt/frigate/docker/main/rootfs/etc/s6-overlay/s6-rc.d/nginx/run
-ln -sf /usr/local/nginx/sbin/nginx  /usr/local/bin/nginx
+ln -sf /usr/local/nginx/sbin/nginx /usr/local/bin/nginx
 msg_ok "Built Nginx"
 
 msg_info "Installing Tempio"

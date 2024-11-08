@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
   ________                        _______     
  /_  __/ /_  ________  ____ _____/ / __(_)___ 
   / / / __ \/ ___/ _ \/ __ `/ __  / /_/ / __ \
@@ -53,15 +53,18 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/threadfin ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP"
-systemctl stop threadfin.service
-wget -q -O /opt/threadfin/threadfin 'https://github.com/Threadfin/Threadfin/releases/latest/download/Threadfin_linux_amd64'
-chmod +x /opt/threadfin/threadfin
-systemctl start threadfin.service
-msg_ok "Updated $APP"
-exit
+  header_info
+  if [[ ! -d /opt/threadfin ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP"
+  systemctl stop threadfin.service
+  wget -q -O /opt/threadfin/threadfin 'https://github.com/Threadfin/Threadfin/releases/latest/download/Threadfin_linux_amd64'
+  chmod +x /opt/threadfin/threadfin
+  systemctl start threadfin.service
+  msg_ok "Updated $APP"
+  exit
 }
 
 start

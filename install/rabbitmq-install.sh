@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.rabbitmq.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -20,7 +20,7 @@ $STD apt-get install -y \
   sudo \
   lsb-release \
   curl \
-  gnupg   \
+  gnupg \
   apt-transport-https \
   make \
   mc

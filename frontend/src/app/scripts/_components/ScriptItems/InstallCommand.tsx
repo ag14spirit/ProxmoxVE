@@ -5,7 +5,7 @@ import { Script } from "@/lib/types";
 import { getDisplayValueFromType } from "../ScriptInfoBlocks";
 
 const getInstallCommand = (scriptPath?: string) => {
-  return `bash -c "$(wget -qLO - https://github.com/community-scripts/${basePath}/raw/main/${scriptPath})"`;
+  return `bash -c "$(wget -qLO - https://github.com/ag14spirit/${basePath}/raw/main/${scriptPath})"`;
 }
 
 export default function InstallCommand({ item }: { item: Script }) {

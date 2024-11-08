@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
    _____
   / ___/____  ____  ____  __________
   \__ \/ __ \/ __ \/ __ `/ ___/ ___/
@@ -53,18 +53,21 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/Sonarr ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP v4"
-systemctl stop sonarr.service
-wget -q -O SonarrV4.tar.gz 'https://services.sonarr.tv/v1/download/main/latest?version=4&os=linux&arch=x64'
-tar -xzf SonarrV4.tar.gz
-rm -rf /opt/Sonarr
-mv Sonarr /opt
-rm -rf SonarrV4.tar.gz
-systemctl start sonarr.service
-msg_ok "Updated $APP v4"
-exit
+  header_info
+  if [[ ! -d /opt/Sonarr ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP v4"
+  systemctl stop sonarr.service
+  wget -q -O SonarrV4.tar.gz 'https://services.sonarr.tv/v1/download/main/latest?version=4&os=linux&arch=x64'
+  tar -xzf SonarrV4.tar.gz
+  rm -rf /opt/Sonarr
+  mv Sonarr /opt
+  rm -rf SonarrV4.tar.gz
+  systemctl start sonarr.service
+  msg_ok "Updated $APP v4"
+  exit
 }
 
 start

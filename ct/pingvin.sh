@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____  _                   _          _____ __                  
    / __ \(_)___  ____ __   __(_)___     / ___// /_  ____ _________
   / /_/ / / __ \/ __ `/ | / / / __ \    \__ \/ __ \/ __ `/ ___/ _ \
@@ -53,30 +53,33 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/pingvin-share ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Stopping Pingvin Share"
-systemctl stop pm2-root.service
-msg_ok "Stopped Pingvin Share"
+  header_info
+  if [[ ! -d /opt/pingvin-share ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Stopping Pingvin Share"
+  systemctl stop pm2-root.service
+  msg_ok "Stopped Pingvin Share"
 
-msg_info "Updating Pingvin Share"
-cd /opt/pingvin-share
-git fetch --tags
-git checkout $(git describe --tags `git rev-list --tags --max-count=1`) &>/dev/null
-cd backend
-npm install &>/dev/null
-npm run build &>/dev/null
-cd ../frontend
-npm install &>/dev/null
-npm run build &>/dev/null
-msg_ok "Updated Pingvin Share"
+  msg_info "Updating Pingvin Share"
+  cd /opt/pingvin-share
+  git fetch --tags
+  git checkout $(git describe --tags $(git rev-list --tags --max-count=1)) &>/dev/null
+  cd backend
+  npm install &>/dev/null
+  npm run build &>/dev/null
+  cd ../frontend
+  npm install &>/dev/null
+  npm run build &>/dev/null
+  msg_ok "Updated Pingvin Share"
 
-msg_info "Starting Pingvin Share"
-systemctl start pm2-root.service
-msg_ok "Started Pingvin Share"
+  msg_info "Starting Pingvin Share"
+  systemctl start pm2-root.service
+  msg_ok "Started Pingvin Share"
 
-msg_ok "Updated Successfully"
-exit
+  msg_ok "Updated Successfully"
+  exit
 }
 
 start

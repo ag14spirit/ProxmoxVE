@@ -4,12 +4,10 @@
 # Author: tteck (tteckster)
 # Co-Author: Scorpoon
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/revenz/Fenrus
 
-
-
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors

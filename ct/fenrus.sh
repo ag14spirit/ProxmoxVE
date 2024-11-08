@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # Co-Author: Scorpoon
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ______
    / ____/__  ____  _______  _______
   / /_  / _ \/ __ \/ ___/ / / / ___/
@@ -54,34 +54,41 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/${APP} ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_error "There is currently no update path available."
-exit
-msg_info "Updating ${APP}"
-systemctl stop ${APP}
-git clone https://github.com/revenz/Fenrus.git
-cd Fenrus || exit
-gitVersionNumber=$(git rev-parse HEAD)
+  header_info
+  if [[ ! -d /opt/${APP} ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_error "There is currently no update path available."
+  exit
+  msg_info "Updating ${APP}"
+  systemctl stop ${APP}
+  git clone https://github.com/revenz/Fenrus.git
+  cd Fenrus || exit
+  gitVersionNumber=$(git rev-parse HEAD)
 
-if [[ "${gitVersionNumber}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
-  mkdir /opt/fenrus-data-backup
-  cp -r "/opt/${APP}/data/" /opt/fenrus-data-backup/data
-  if [[ ! -d /opt/fenrus-data-backup/data ]]; then msg_error "Backup of data folder failed! exiting..."; rm -r /opt/fenrus-data-backup/; exit; fi 
-  export DOTNET_CLI_TELEMETRY_OPTOUT=1
-  dotnet publish -c Release -o "/opt/${APP}/" Fenrus.csproj
-  cp -r /opt/fenrus-data-backup/data/ "/opt/${APP}/"
-  echo "${gitVersionNumber}" >"/opt/${APP}_version.txt"
-  rm -r /opt/fenrus-data-backup/
-  msg_ok "Updated $APP"
-else
-  msg_ok "No update required. ${APP} is already up to date"
-fi
-cd ..
-rm -r Fenrus/
+  if [[ "${gitVersionNumber}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
+    mkdir /opt/fenrus-data-backup
+    cp -r "/opt/${APP}/data/" /opt/fenrus-data-backup/data
+    if [[ ! -d /opt/fenrus-data-backup/data ]]; then
+      msg_error "Backup of data folder failed! exiting..."
+      rm -r /opt/fenrus-data-backup/
+      exit
+    fi
+    export DOTNET_CLI_TELEMETRY_OPTOUT=1
+    dotnet publish -c Release -o "/opt/${APP}/" Fenrus.csproj
+    cp -r /opt/fenrus-data-backup/data/ "/opt/${APP}/"
+    echo "${gitVersionNumber}" >"/opt/${APP}_version.txt"
+    rm -r /opt/fenrus-data-backup/
+    msg_ok "Updated $APP"
+  else
+    msg_ok "No update required. ${APP} is already up to date"
+  fi
+  cd ..
+  rm -r Fenrus/
 
-systemctl start ${APP}
-exit
+  systemctl start ${APP}
+  exit
 }
 
 start

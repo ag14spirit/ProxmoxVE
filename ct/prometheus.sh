@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____                            __  __                   
    / __ \_________  ____ ___  ___  / /_/ /_  ___  __  _______
   / /_/ / ___/ __ \/ __  __ \/ _ \/ __/ __ \/ _ \/ / / / ___/
@@ -53,33 +53,36 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -f /etc/systemd/system/prometheus.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-RELEASE=$(curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-  msg_info "Stopping ${APP}"
-  systemctl stop prometheus
-  msg_ok "Stopped ${APP}"
-  
-  msg_info "Updating ${APP} to ${RELEASE}"
-  wget -q https://github.com/prometheus/prometheus/releases/download/v${RELEASE}/prometheus-${RELEASE}.linux-amd64.tar.gz
-  tar -xf prometheus-${RELEASE}.linux-amd64.tar.gz
-  cd prometheus-${RELEASE}.linux-amd64
-  cp -rf prometheus promtool /usr/local/bin/
-  cp -rf consoles/ console_libraries/ /etc/prometheus/
-  cd ~
-  rm -rf prometheus-${RELEASE}.linux-amd64 prometheus-${RELEASE}.linux-amd64.tar.gz
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated ${APP} to ${RELEASE}"
+  header_info
+  if [[ ! -f /etc/systemd/system/prometheus.service ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  RELEASE=$(curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Stopping ${APP}"
+    systemctl stop prometheus
+    msg_ok "Stopped ${APP}"
 
-  msg_info "Starting ${APP}"
-  systemctl start prometheus
-  msg_ok "Started ${APP}"
-  msg_ok "Updated Successfully"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+    msg_info "Updating ${APP} to ${RELEASE}"
+    wget -q https://github.com/prometheus/prometheus/releases/download/v${RELEASE}/prometheus-${RELEASE}.linux-amd64.tar.gz
+    tar -xf prometheus-${RELEASE}.linux-amd64.tar.gz
+    cd prometheus-${RELEASE}.linux-amd64
+    cp -rf prometheus promtool /usr/local/bin/
+    cp -rf consoles/ console_libraries/ /etc/prometheus/
+    cd ~
+    rm -rf prometheus-${RELEASE}.linux-amd64 prometheus-${RELEASE}.linux-amd64.tar.gz
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated ${APP} to ${RELEASE}"
+
+    msg_info "Starting ${APP}"
+    systemctl start prometheus
+    msg_ok "Started ${APP}"
+    msg_ok "Updated Successfully"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 
 start

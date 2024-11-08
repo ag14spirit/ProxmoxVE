@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 header_info() {
   clear
@@ -43,7 +43,6 @@ msg_error() {
   local msg="$1"
   echo -e "${BFR} ${CROSS} ${RD}${msg}${CL}"
 }
-
 
 start_routines() {
   header_info
@@ -164,7 +163,10 @@ while true; do
   read -p "Start the Update to Proxmox Backup Server 3 Script (y/n)?" yn
   case $yn in
   [Yy]*) break ;;
-  [Nn]*) clear; exit ;;
+  [Nn]*)
+    clear
+    exit
+    ;;
   *) echo "Please answer yes or no." ;;
   esac
 done

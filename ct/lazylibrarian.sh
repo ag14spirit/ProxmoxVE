@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: MountyMapleSyrup (MountyMapleSyrup)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     __                      __    _ __                    _           
    / /   ____ _____  __  __/ /   (_) /_  _________ ______(_)___ _____ 
   / /   / __ `/_  / / / / / /   / / __ \/ ___/ __ `/ ___/ / __ `/ __ \
@@ -54,22 +54,25 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/LazyLibrarian/ ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Stopping LazyLibrarian"
-systemctl stop lazylibrarian
-msg_ok "LazyLibrarian Stopped"
+  header_info
+  if [[ ! -d /opt/LazyLibrarian/ ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Stopping LazyLibrarian"
+  systemctl stop lazylibrarian
+  msg_ok "LazyLibrarian Stopped"
 
-msg_info "Updating $APP LXC"
-git -C /opt/LazyLibrarian pull origin master &>/dev/null
-msg_ok "Updated $APP LXC"
+  msg_info "Updating $APP LXC"
+  git -C /opt/LazyLibrarian pull origin master &>/dev/null
+  msg_ok "Updated $APP LXC"
 
-msg_info "Starting LazyLibrarian"
-systemctl start lazylibrarian
-msg_ok "Started LazyLibrarian"
+  msg_info "Starting LazyLibrarian"
+  systemctl start lazylibrarian
+  msg_ok "Started LazyLibrarian"
 
-msg_ok "Updated Successfully"
-exit
+  msg_ok "Updated Successfully"
+  exit
 }
 
 start

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
   cat <<"EOF"
@@ -71,10 +71,10 @@ function cleanup() {
 }
 TEMP_DIR=$(mktemp -d)
 pushd $TEMP_DIR >/dev/null
-if ! command -v whiptail &> /dev/null; then
-    echo "Installing whiptail..."
-    apt-get update &>/dev/null
-    apt-get install -y whiptail &>/dev/null
+if ! command -v whiptail &>/dev/null; then
+  echo "Installing whiptail..."
+  apt-get update &>/dev/null
+  apt-get install -y whiptail &>/dev/null
 fi
 if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "PiMox HAOS VM" --yesno "This will create a New PiMox HAOS VM. Proceed?" 10 58); then
   echo "User selected Yes"
@@ -310,7 +310,7 @@ qm set $VMID \
   -scsi0 ${DISK1_REF},size=32G >/dev/null
 qm set $VMID \
   -boot order=scsi0 \
-  -description "<div align='center'><a href='https://Helper-Scripts.com'><img src='https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo-81x112.png'/></a>
+  -description "<div align='center'><a href='https://Helper-Scripts.com'><img src='https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/images/logo-81x112.png'/></a>
 
   # Home Assistant OS
 

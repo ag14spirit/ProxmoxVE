@@ -1,6 +1,6 @@
 <div align="center">
   <a href="#">
-    <img src="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo.png" height="100px" />
+    <img src="https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/images/logo.png" height="100px" />
  </a>
 </div>
 
@@ -13,15 +13,15 @@
   <p>Warm regards,<br>The Community</p>
 </div>
 
---- 
+---
 
 <p align="center">
   <a href="https://helper-scripts.com">Website</a> | 
   <a href="https://ko-fi.com/proxmoxhelperscripts">Ko-Fi (for tteck🙏)</a> |
-  <a href="https://github.com/community-scripts/ProxmoxVE/blob/main/.github/CONTRIBUTING.md">Contribute</a> |
-  <a href="https://github.com/community-scripts/ProxmoxVE/blob/main/USER_SUBMITTED_GUIDES.md">Guides</a> |
+  <a href="https://github.com/ag14spirit/ProxmoxVE/blob/main/.github/CONTRIBUTING.md">Contribute</a> |
+  <a href="https://github.com/ag14spirit/ProxmoxVE/blob/main/USER_SUBMITTED_GUIDES.md">Guides</a> |
   <a href="https://discord.gg/UHrpNWGwkH">Discord</a> |
-  <a href="https://github.com/community-scripts/ProxmoxVE/blob/main/CHANGELOG.md">Changelog</a>
+  <a href="https://github.com/ag14spirit/ProxmoxVE/blob/main/CHANGELOG.md">Changelog</a>
 </p>
 
 ---
@@ -33,12 +33,13 @@ All configuration choices are displayed in a dialog box, where users can select 
 <hr>
 
 <p align="center">
-Please exercise caution and thoroughly review scripts and automation tasks from external sources. <a href="https://github.com/community-scripts/ProxmoxVE/blob/main/CODE-AUDIT.md">Read more</a>
+Please exercise caution and thoroughly review scripts and automation tasks from external sources. <a href="https://github.com/ag14spirit/ProxmoxVE/blob/main/CODE-AUDIT.md">Read more</a>
 </p>
 
 ---
 
 ### Note on the Transition:
+
 This project is now maintained by the community in memory of tteck’s invaluable contribution. His dedication transformed the Proxmox experience for countless users, and we’re committed to continuing his work with the same dedication.
 
 ---

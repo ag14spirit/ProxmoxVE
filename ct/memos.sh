@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     __  ___                         
    /  |/  /__  ____ ___  ____  _____
   / /|_/ / _ \/ __ `__ \/ __ \/ ___/
@@ -54,30 +54,31 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/memos ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP (Patience)"
-cd /opt/memos
-output=$(git pull --no-rebase)
-if echo "$output" | grep -q "Already up to date."
-then
-  msg_ok "$APP is already up to date."
+  header_info
+  if [[ ! -d /opt/memos ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP (Patience)"
+  cd /opt/memos
+  output=$(git pull --no-rebase)
+  if echo "$output" | grep -q "Already up to date."; then
+    msg_ok "$APP is already up to date."
+    exit
+  fi
+  systemctl stop memos
+  cd /opt/memos/web
+  pnpm i --frozen-lockfile &>/dev/null
+  pnpm build &>/dev/null
+  cd /opt/memos
+  mkdir -p /opt/memos/server/dist
+  cp -r web/dist/* /opt/memos/server/dist/
+  cp -r web/dist/* /opt/memos/server/router/frontend/dist/
+  go build -o /opt/memos/memos -tags=embed bin/memos/main.go &>/dev/null
+  systemctl start memos
+  msg_ok "Updated $APP"
   exit
-fi
-systemctl stop memos
-cd /opt/memos/web 
-pnpm i --frozen-lockfile &>/dev/null
-pnpm build &>/dev/null
-cd /opt/memos
-mkdir -p /opt/memos/server/dist
-cp -r web/dist/* /opt/memos/server/dist/
-cp -r web/dist/* /opt/memos/server/router/frontend/dist/ 
-go build -o /opt/memos/memos -tags=embed bin/memos/main.go &>/dev/null
-systemctl start memos
-msg_ok "Updated $APP"
-exit
 }
-
 
 start
 build_container

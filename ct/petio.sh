@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____       __  _     
    / __ \___  / /_(_)___ 
   / /_/ / _ \/ __/ / __ \
@@ -53,15 +53,18 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/Petio ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Updating $APP"
-systemctl stop petio.service
-wget https://petio.tv/releases/latest -O petio-latest.zip
-unzip petio-latest.zip -d /opt/Petio
-systemctl start petio.service
-msg_ok "Updated $APP"
-exit
+  header_info
+  if [[ ! -d /opt/Petio ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Updating $APP"
+  systemctl stop petio.service
+  wget https://petio.tv/releases/latest -O petio-latest.zip
+  unzip petio-latest.zip -d /opt/Petio
+  systemctl start petio.service
+  msg_ok "Updated $APP"
+  exit
 }
 
 start

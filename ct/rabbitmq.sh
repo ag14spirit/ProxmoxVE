@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____        __    __    _ __  __  _______ 
    / __ \____ _/ /_  / /_  (_) /_/  |/  / __ \
   / /_/ / __ `/ __ \/ __ \/ / __/ /|_/ / / / /
@@ -53,27 +53,29 @@ function default_settings() {
   echo_default
 }
 
-
 function update_script() {
-header_info
-if [[ ! -d /etc/rabbitmq ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-fi
-msg_info "Stopping ${APP} Service"
-systemctl stop rabbitmq-server
-msg_ok "Stopped ${APP} Service"
+  header_info
+  if [[ ! -d /etc/rabbitmq ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  if (($(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80)); then
+    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+  fi
+  msg_info "Stopping ${APP} Service"
+  systemctl stop rabbitmq-server
+  msg_ok "Stopped ${APP} Service"
 
-msg_info "Updating..."
-apt install --only-upgrade rabbitmq-server &>/dev/null
-msg_ok "Update Successfully"
+  msg_info "Updating..."
+  apt install --only-upgrade rabbitmq-server &>/dev/null
+  msg_ok "Update Successfully"
 
-msg_info "Starting ${APP}"
-systemctl start rabbitmq-server
-msg_ok "Started ${APP}"
-msg_ok "Updated Successfully"
-exit
+  msg_info "Starting ${APP}"
+  systemctl start rabbitmq-server
+  msg_ok "Started ${APP}"
+  msg_ok "Updated Successfully"
+  exit
 }
 
 start

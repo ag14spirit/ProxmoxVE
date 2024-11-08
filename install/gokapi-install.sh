@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -28,7 +28,7 @@ rm gokapi-linux_amd64.zip
 chmod +x /opt/gokapi/gokapi-linux_amd64
 msg_ok "Installed Gokapi"
 
-msg_info "Creating Service" 
+msg_info "Creating Service"
 cat <<EOF >/etc/systemd/system/gokapi.service
 [Unit]
 Description=gokapi

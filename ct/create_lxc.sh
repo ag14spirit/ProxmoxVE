@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 # This sets verbose mode if the global variable is set to "yes"
 # if [ "$VERBOSE" == "yes" ]; then set -x; fi
@@ -25,7 +25,7 @@ trap 'error_handler $LINENO "$BASH_COMMAND"' ERR
 
 # This function handles errors
 function error_handler() {
-  if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID > /dev/null; then kill $SPINNER_PID > /dev/null; fi
+  if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID >/dev/null; then kill $SPINNER_PID >/dev/null; fi
   printf "\e[?25h"
   local exit_code="$?"
   local line_number="$1"
@@ -36,13 +36,13 @@ function error_handler() {
 
 # This function displays a spinner.
 function spinner() {
-    local chars="/-\|"
-    local spin_i=0
-    printf "\e[?25l"
-    while true; do
-        printf "\r \e[36m%s\e[0m" "${chars:spin_i++%${#chars}:1}"
-        sleep 0.1
-    done
+  local chars="/-\|"
+  local spin_i=0
+  printf "\e[?25l"
+  while true; do
+    printf "\r \e[36m%s\e[0m" "${chars:spin_i++%${#chars}:1}"
+    sleep 0.1
+  done
 }
 
 # This function displays an informational message with a yellow color.
@@ -55,7 +55,7 @@ function msg_info() {
 
 # This function displays a success message with a green color.
 function msg_ok() {
-  if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID > /dev/null; then kill $SPINNER_PID > /dev/null; fi
+  if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID >/dev/null; then kill $SPINNER_PID >/dev/null; fi
   printf "\e[?25h"
   local msg="$1"
   echo -e "${BFR} ${CM} ${GN}${msg}${CL}"
@@ -63,7 +63,7 @@ function msg_ok() {
 
 # This function displays a error message with a red color.
 function msg_error() {
-  if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID > /dev/null; then kill $SPINNER_PID > /dev/null; fi
+  if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID >/dev/null; then kill $SPINNER_PID >/dev/null; fi
   printf "\e[?25h"
   local msg="$1"
   echo -e "${BFR} ${CROSS} ${RD}${msg}${CL}"
@@ -98,7 +98,7 @@ function select_storage() {
     ;;
   *) false || exit "Invalid storage class." ;;
   esac
-  
+
   # This Queries all storage locations
   local -a MENU
   while read -r line; do
@@ -112,17 +112,17 @@ function select_storage() {
     fi
     MENU+=("$TAG" "$ITEM" "OFF")
   done < <(pvesm status -content $CONTENT | awk 'NR>1')
-  
+
   # Select storage location
-  if [ $((${#MENU[@]}/3)) -eq 1 ]; then
+  if [ $((${#MENU[@]} / 3)) -eq 1 ]; then
     printf ${MENU[0]}
   else
     local STORAGE
     while [ -z "${STORAGE:+x}" ]; do
       STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Storage Pools" --radiolist \
-      "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\nTo make a selection, use the Spacebar.\n" \
-      16 $(($MSG_MAX_LENGTH + 23)) 6 \
-      "${MENU[@]}" 3>&1 1>&2 2>&3) || exit "Menu aborted."
+        "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\nTo make a selection, use the Spacebar.\n" \
+        16 $(($MSG_MAX_LENGTH + 23)) 6 \
+        "${MENU[@]}" 3>&1 1>&2 2>&3) || exit "Menu aborted."
     done
     printf $STORAGE
   fi

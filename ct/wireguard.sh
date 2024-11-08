@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
  _       ___           ______                     __
 | |     / (_)_______  / ____/_  ______ __________/ /
 | | /| / / / ___/ _ \/ / __/ / / / __ `/ ___/ __  / 
@@ -53,13 +53,16 @@ function default_settings() {
 }
 
 function update_script() {
-if [[ ! -d /etc/wireguard ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-apt-get update
-apt-get -y upgrade
-sleep 2
-cd /etc/wgdashboard/src
-./wgd.sh update
-exit
+  if [[ ! -d /etc/wireguard ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  apt-get update
+  apt-get -y upgrade
+  sleep 2
+  cd /etc/wgdashboard/src
+  ./wgd.sh update
+  exit
 }
 
 start

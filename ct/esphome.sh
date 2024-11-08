@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ___________ ____  __  __                   
    / ____/ ___// __ \/ / / /___  ____ ___  ___ 
   / __/  \__ \/ /_/ / /_/ / __ \/ __ `__ \/ _ \
@@ -53,24 +53,27 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -f /etc/systemd/system/esphomeDashboard.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-msg_info "Stopping ESPHome"
-systemctl stop esphomeDashboard
-msg_ok "Stopped ESPHome"
+  header_info
+  if [[ ! -f /etc/systemd/system/esphomeDashboard.service ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  msg_info "Stopping ESPHome"
+  systemctl stop esphomeDashboard
+  msg_ok "Stopped ESPHome"
 
-msg_info "Updating ESPHome"
-if [[ -d /srv/esphome ]]; then
-  source /srv/esphome/bin/activate &>/dev/null
-fi
-pip3 install -U esphome &>/dev/null
-msg_ok "Updated ESPHome"
+  msg_info "Updating ESPHome"
+  if [[ -d /srv/esphome ]]; then
+    source /srv/esphome/bin/activate &>/dev/null
+  fi
+  pip3 install -U esphome &>/dev/null
+  msg_ok "Updated ESPHome"
 
-msg_info "Starting ESPHome"
-systemctl start esphomeDashboard
-msg_ok "Started ESPHome"
-msg_ok "Updated Successfully"
-exit
+  msg_info "Starting ESPHome"
+  systemctl start esphomeDashboard
+  msg_ok "Started ESPHome"
+  msg_ok "Updated Successfully"
+  exit
 }
 
 start

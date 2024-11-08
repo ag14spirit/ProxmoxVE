@@ -3,11 +3,11 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
 function header_info {
-    clear
-    cat <<"EOF"
+  clear
+  cat <<"EOF"
     _______ __     ____
    / ____(_) /__  / __ )_________ _      __________  _____
   / /_  / / / _ \/ __  / ___/ __ \ | /| / / ___/ _ \/ ___/
@@ -32,35 +32,35 @@ hostname="$(hostname)"
 header_info
 if [ -f /root/filebrowser.db ]; then
   read -r -p "Would you like to uninstall ${APP} on $hostname.? <y/N> " prompt
-    if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-      systemctl disable -q --now filebrowser.service
-      rm -rf /usr/local/bin/filebrowser /root/filebrowser.db /etc/systemd/system/filebrowser.service
-      echo "$APP Removed"
-      sleep 2
-      clear
-      exit
-    else
-      clear
-      exit
-    fi
-fi 
+  if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
+    systemctl disable -q --now filebrowser.service
+    rm -rf /usr/local/bin/filebrowser /root/filebrowser.db /etc/systemd/system/filebrowser.service
+    echo "$APP Removed"
+    sleep 2
+    clear
+    exit
+  else
+    clear
+    exit
+  fi
+fi
 while true; do
-    read -p "This will Install ${APP} on $hostname. Proceed(y/n)?" yn
-    case $yn in
-    [Yy]*) break ;;
-    [Nn]*) exit ;;
-    *) echo "Please answer yes or no." ;;
-    esac
+  read -p "This will Install ${APP} on $hostname. Proceed(y/n)?" yn
+  case $yn in
+  [Yy]*) break ;;
+  [Nn]*) exit ;;
+  *) echo "Please answer yes or no." ;;
+  esac
 done
 header_info
 function msg_info() {
-    local msg="$1"
-    echo -ne " ${HOLD} ${YW}${msg}..."
+  local msg="$1"
+  echo -ne " ${HOLD} ${YW}${msg}..."
 }
 
 function msg_ok() {
-    local msg="$1"
-    echo -e "${BFR} ${CM} ${GN}${msg}${CL}"
+  local msg="$1"
+  echo -e "${BFR} ${CM} ${GN}${msg}${CL}"
 }
 
 read -r -p "Would you like to use No Authentication? <y/N> " prompt
@@ -74,7 +74,7 @@ if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
   filebrowser config set -a '0.0.0.0' &>/dev/null
   filebrowser config init --auth.method=noauth &>/dev/null
   filebrowser config set --auth.method=noauth &>/dev/null
-  filebrowser users add ID 1 --perm.admin &>/dev/null  
+  filebrowser users add ID 1 --perm.admin &>/dev/null
 else
   filebrowser config init -a '0.0.0.0' &>/dev/null
   filebrowser config set -a '0.0.0.0' &>/dev/null

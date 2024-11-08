@@ -3,9 +3,9 @@
 # Copyright (c) 2021-2024 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 
-source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
 verb_ip6
 catch_errors
@@ -74,7 +74,7 @@ touch /opt/pialert/log/pialert.vendors.log /opt/pialert/log/pialert.IP.log /opt/
 src_dir="/opt/pialert/log"
 dest_dir="/opt/pialert/front/php/server"
 for file in pialert.vendors.log pialert.IP.log pialert.1.log pialert.cleanup.log pialert.webservices.log; do
-    ln -s "$src_dir/$file" "$dest_dir/$file"
+  ln -s "$src_dir/$file" "$dest_dir/$file"
 done
 sed -i 's#PIALERT_PATH\s*=\s*'\''/home/pi/pialert'\''#PIALERT_PATH           = '\''/opt/pialert'\''#' /opt/pialert/config/pialert.conf
 sed -i 's/$HOME/\/opt/g' /opt/pialert/install/pialert.cron

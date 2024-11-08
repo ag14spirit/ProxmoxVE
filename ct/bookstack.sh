@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/ag14spirit/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2024 community-scripts ORG
 # Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://github.com/ag14spirit/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/BookStackApp/BookStack
 
 function header_info {
-clear
-cat <<"EOF"
+  clear
+  cat <<"EOF"
     ____              __        __             __  
    / __ )____  ____  / /_______/ /_____ ______/ /__
   / __  / __ \/ __ \/ //_/ ___/ __/ __ `/ ___/ //_/
@@ -54,42 +54,45 @@ function default_settings() {
 }
 
 function update_script() {
-header_info
-if [[ ! -d /opt/bookstack ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-fi
-RELEASE=$(curl -s https://api.github.com/repos/BookStackApp/BookStack/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-  msg_info "Stopping Apache2"
-  systemctl stop apache2
-  msg_ok "Services Stopped"
+  header_info
+  if [[ ! -d /opt/bookstack ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  if (($(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80)); then
+    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+  fi
+  RELEASE=$(curl -s https://api.github.com/repos/BookStackApp/BookStack/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Stopping Apache2"
+    systemctl stop apache2
+    msg_ok "Services Stopped"
 
-  msg_info "Updating ${APP} to ${RELEASE}"
-  cp /opt/bookstack/.env /opt/.env
-  wget -q "https://github.com/BookStackApp/BookStack/archive/refs/tags/v${RELEASE}.zip"
-  unzip -q v${RELEASE}.zip
-  mv BookStack-${RELEASE} /opt/bookstack
-  mv /opt/.env /opt/bookstack/.env
-  COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev  &>/dev/null
-  php artisan key:generate &>/dev/null
-  php artisan migrate &>/dev/null
-  echo "${RELEASE}" >/opt/${APP}_version.txt
-  msg_ok "Updated ${APP}"
+    msg_info "Updating ${APP} to ${RELEASE}"
+    cp /opt/bookstack/.env /opt/.env
+    wget -q "https://github.com/BookStackApp/BookStack/archive/refs/tags/v${RELEASE}.zip"
+    unzip -q v${RELEASE}.zip
+    mv BookStack-${RELEASE} /opt/bookstack
+    mv /opt/.env /opt/bookstack/.env
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev &>/dev/null
+    php artisan key:generate &>/dev/null
+    php artisan migrate &>/dev/null
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated ${APP}"
 
-  msg_info "Starting Apache2"
-  systemctl start apache2
-  msg_ok "Started Apache2"
+    msg_info "Starting Apache2"
+    systemctl start apache2
+    msg_ok "Started Apache2"
 
-  msg_info "Cleaning Up"
-  rm -rf v${RELEASE}.zip
-  msg_ok "Cleaned"
-  msg_ok "Updated Successfully"
-else
-  msg_ok "No update required. ${APP} is already at ${RELEASE}"
-fi
-exit
+    msg_info "Cleaning Up"
+    rm -rf v${RELEASE}.zip
+    msg_ok "Cleaned"
+    msg_ok "Updated Successfully"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
 }
 start
 build_container
